@@ -77,7 +77,7 @@ namespace BinaryKits.Utility.ZPLUtility
         public int FontWidth { get; private set; }
         public int FontHeight { get; private set; }
 
-        public ZPLFont(int fontWidth = 30, int fontHeight = 30, string fontName = "0", string orientation = "")
+        public ZPLFont(int fontWidth = 30, int fontHeight = 30, string fontName = "0", string orientation = "N")
         {
             FontName = fontName;
             Orientation = orientation;
@@ -87,7 +87,12 @@ namespace BinaryKits.Utility.ZPLUtility
 
         public override IEnumerable<string> Render(ZPLRenderOptions context)
         {
-            return new[] { "^A" + FontName + Orientation + "," + context.Scale(FontHeight) + "," + context.Scale(FontWidth) };
+            string textOrientation = Orientation;
+            if (string.IsNullOrEmpty(textOrientation))
+            {
+                textOrientation = context.DefaultTextOrientation;
+            }
+            return new[] { "^A" + FontName + textOrientation + "," + context.Scale(FontHeight) + "," + context.Scale(FontWidth) };
         }
     }
 
